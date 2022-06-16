@@ -18,12 +18,25 @@ const FullComment = ({ commentId }) => {
   // console.log(commentId);
   if (commentId) commentDetail = <p className="text-2xl text-red-600">Loading...</p>;
 
+  const deleteHandler = () => {
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/comments/${commentId}`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
   if (comment) {
     commentDetail = (
       <div className="mb-4 flex w-full flex-col items-center justify-center rounded bg-blue-200 p-8">
         <p>{comment.name}</p>
         <p>{comment.email}</p>
         <p>{comment.body}</p>
+        <button
+          onClick={deleteHandler}
+          className="mt-3 rounded border border-red-300 bg-white px-3 py-1 text-red-300 active:bg-red-100"
+        >
+          Delete
+        </button>
       </div>
     );
   }
