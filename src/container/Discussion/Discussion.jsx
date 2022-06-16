@@ -52,7 +52,7 @@ const Discussion = () => {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const { data } = await axios.get("https://jsonplaceholder.typicode.com/comments");
+        const { data } = await axios.get("http://localhost:3001/comments");
         // console.log(response);
         setComments(data.slice(0, 5));
       } catch (error) {
