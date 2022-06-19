@@ -7,6 +7,7 @@ import NewComment from "../../components/NewComment";
 const Discussion = () => {
   const [comments, setComments] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [error, setError] = useState(false);
 
   // 2xx : ok
   // 301, 302 => redirect(SEO)
@@ -52,11 +53,12 @@ const Discussion = () => {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3001/comments");
+        const { data } = await axios.get("https://jsonplaceholder.typicode.com/comments/");
         // console.log(response);
-        setComments(data.slice(0, 5));
+        setComments(data.slice(0, 4));
       } catch (error) {
-        console.log(error);
+        // console.log(error);
+        setError(true);
       }
     };
     getComments();
@@ -67,24 +69,31 @@ const Discussion = () => {
     setSelectedId(id);
   };
 
+  const renderComments = () => {
+    // loading, comments, or error ?!
+    let renderValue = <p>Loading...</p>;
+
+    if (error) renderValue = <p>fetching data failed!</p>;
+
+    if (comments && !error) {
+      renderValue = comments.map((c) => (
+        <Comment
+          key={c.id}
+          name={c.name}
+          email={c.email}
+          body={c.body}
+          onClick={() => selectCommentHandler(c.id)}
+        />
+      ));
+    }
+
+    return renderValue;
+  };
+
   return (
     <div>
       <main>
-        <section className="flex justify-between gap-x-2 overflow-auto">
-          {comments ? (
-            comments.map((c) => (
-              <Comment
-                key={c.id}
-                name={c.name}
-                email={c.email}
-                body={c.body}
-                onClick={() => selectCommentHandler(c.id)}
-              />
-            )) // if comments exist...
-          ) : (
-            <p className="text-center text-2xl">Loding...</p>
-          )}
-        </section>
+        <section className="flex justify-between gap-x-2 overflow-auto">{renderComments()}</section>
         <section>
           <FullComment commentId={selectedId} />
         </section>

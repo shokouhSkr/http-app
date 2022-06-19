@@ -11,7 +11,7 @@ const NewComment = () => {
 
   const postCommentHandler = () => {
     axios
-      .post("http://localhost:3001/comments", {
+      .post("https://jsonplaceholder.typicode.com/comments/", {
         ...comment,
         postId: 10,
       })
