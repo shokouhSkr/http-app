@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Comment from "../../components/Comment";
 import FullComment from "../../components/FullComment";
 import NewComment from "../../components/NewComment";
+import { toast } from "react-toastify";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
@@ -73,7 +74,10 @@ const Discussion = () => {
     // loading, comments, or error ?!
     let renderValue = <p>Loading...</p>;
 
-    if (error) renderValue = <p>fetching data failed!</p>;
+    if (error) {
+      renderValue = <p>fetching data failed!</p>;
+      toast.error("there is an error");
+    }
 
     if (comments && !error) {
       renderValue = comments.map((c) => (
